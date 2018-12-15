@@ -1,4 +1,5 @@
 https://www.winpcap.org/
 
+https://github.com/PcapDotNet/Pcap.Net/wiki/Pcap.Net-Tutorial-Interpreting-the-packets
 https://gitlab.com/f1ssi0n/sniffles
 https://www.unknowncheats.me/forum/counterstrike-global-offensive/292668-networking-megathread.html
