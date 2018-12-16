@@ -3,3 +3,9 @@ https://www.winpcap.org/
 https://github.com/PcapDotNet/Pcap.Net/wiki/Pcap.Net-Tutorial-Interpreting-the-packets
 https://gitlab.com/f1ssi0n/sniffles
 https://www.unknowncheats.me/forum/counterstrike-global-offensive/292668-networking-megathread.html
+
+
+https://debuglog.wordpress.com/2015/01/13/netshark-attack-vectors/
+https://debuglog.wordpress.com/2014/12/06/netshark-go/
+
+https://github.com/CRACKbomber/Source360/blob/master/Source360.Test/Program.cs
