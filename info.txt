@@ -9,3 +9,6 @@ https://debuglog.wordpress.com/2015/01/13/netshark-attack-vectors/
 https://debuglog.wordpress.com/2014/12/06/netshark-go/
 
 https://github.com/CRACKbomber/Source360/blob/master/Source360.Test/Program.cs
+
+https://github.com/StatsHelix/demoinfo
+https://github.com/EHVAG/demostatistics-generator

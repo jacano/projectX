@@ -10,6 +10,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DemoInfo">
+      <HintPath>..\..\demoinfo-master\DemoInfo\bin\Release\DemoInfo.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="match730_003317647861457354858_2030613425_135.dem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="plain.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

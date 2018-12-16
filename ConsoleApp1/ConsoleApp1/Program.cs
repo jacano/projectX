@@ -1,4 +1,5 @@
-﻿using PcapDotNet.Core;
+﻿using CSERLibrary.Models;
+using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using System;
 using System.Linq;
@@ -7,6 +8,8 @@ namespace ConsoleApp1
 {
     class Program
     {
+        static readonly byte[] iceKey = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
         static void Main(string[] args)
         {
             var allDevices = LivePacketDevice.AllLocalMachine;
@@ -70,11 +73,32 @@ namespace ConsoleApp1
 
             if (udp.SourcePort == 27015)
             {
-                // print ip addresses and udp ports
                 Console.WriteLine(packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff") + " " + ip.Source + ":" + udp.SourcePort + " -> " + ip.Destination + ":" + udp.DestinationPort);
                 Console.WriteLine(udp.Payload);
 
-                //udp.Payload.ToMemoryStream()
+                using (var ms = udp.Payload.ToMemoryStream())
+                {
+                    var ice = new IceKey(2);
+                    ice.Set(iceKey);
+
+                    var blockSize = ice.BlockSize();
+                    var p1 = new byte[blockSize];
+                    var p2 = new byte[blockSize];
+
+                    var bytesLeft = ms.Length;
+                    var plain = new byte[bytesLeft];
+
+                    while (bytesLeft >= blockSize)
+                    {
+                        ice.Decrypt(p1, ref p2);
+
+                        bytesLeft -= blockSize;
+                    }
+
+
+
+
+                }
             }
         }
     }

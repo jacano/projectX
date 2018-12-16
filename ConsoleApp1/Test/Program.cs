@@ -1,4 +1,5 @@
 ﻿using CSERLibrary.Models;
+using DemoInfo;
 using System;
 using System.IO;
 
@@ -6,16 +7,39 @@ namespace Test
 {
     class Program
     {
+        private static DemoParser parser;
+
         static void Main(string[] args)
         {
-            Encrypt();
-            Decrypt();
+            //Encrypt();
+            //Decrypt();
+
+            DemoTest();
+        }
+
+        private static void DemoTest()
+        {
+            parser = new DemoParser(File.OpenRead("match730_003317647861457354858_2030613425_135.dem"));
+
+            parser.TickDone += parser_TickDone;
+
+            parser.ParseHeader();
+            parser.ParseToEnd();
+        }
+
+        private static void parser_TickDone(object sender, TickDoneEventArgs e)
+        {
+            Console.WriteLine($"IngameTick: {parser.IngameTick}");
+            foreach (var playingParticipants in parser.PlayingParticipants)
+            {
+                Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+            }
         }
 
         private static void Decrypt()
         {
             var ice = new IceKey(2);
-            ice.Set(new byte[] { 0x43, 0x53, 0x47, 0x4F, 0xCC, 0x34, 0x00, 0x00, 0x33, 0x0D, 0x00, 0x00, 0x4C, 0x03, 0x00, 0x00 });
+            ice.Set(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
 
             using (var reader = new BinaryReader(File.OpenRead("out.ice")))
             {
@@ -36,7 +60,7 @@ namespace Test
         private static void Encrypt()
         {
             var ice = new IceKey(2);
-            ice.Set(new byte[] { 0x43, 0x53, 0x47, 0x4F, 0xCC, 0x34, 0x00, 0x00, 0x33, 0x0D, 0x00, 0x00, 0x4C, 0x03, 0x00, 0x00 });
+            ice.Set(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
 
             using (var reader = new BinaryReader(File.OpenRead("plain.txt")))
             {
