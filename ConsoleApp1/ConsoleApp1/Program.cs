@@ -1,7 +1,9 @@
 ﻿using CSERLibrary.Models;
+using DemoInfo;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace ConsoleApp1
@@ -42,7 +44,7 @@ namespace ConsoleApp1
 
             var selectedDevice = allDevices[deviceIndex];
 
-            using (var communicator = selectedDevice.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000))  
+            using (var communicator = selectedDevice.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
             {
                 if (communicator.DataLink.Kind != DataLinkKind.Ethernet)
                 {
@@ -65,43 +67,54 @@ namespace ConsoleApp1
         {
             var ip = packet.Ethernet.IpV4;
             var udp = ip.Udp;
+            var payload = udp.Payload;
 
-            if (udp.SourcePort == 27015)
+            Console.WriteLine($"{ip.Source}:{udp.SourcePort} -> {ip.Destination}:{udp.DestinationPort}");
+            Console.WriteLine(payload);
+
+            if (udp.SourcePort != 27015)
             {
-                Console.WriteLine($"{packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff")} {ip.Source}:{udp.SourcePort} -> {ip.Destination}:{udp.DestinationPort}");
-                Console.WriteLine(udp.Payload);
+                return;
+            }
 
-                var ice = new IceKey(2);
-                ice.Set(iceKey);
+            var ice = new IceKey(2);
+            ice.Set(iceKey);
 
-                var blockSize = ice.BlockSize();
-                var ciphertextBlock = new byte[blockSize];
-                var plaintextBlock = new byte[blockSize];
+            var blockSize = ice.BlockSize();
+            var ciphertextBlock = new byte[blockSize];
+            var plaintextBlock = new byte[blockSize];
 
-                using (var ciphertext = udp.Payload.ToMemoryStream())
+            using (var plaintext = new MemoryStream(payload.Length))
+            {
+                using (var ciphertext = payload.ToMemoryStream())
                 {
-                    var plaintext = new byte[ciphertext.Length];
-                    var plaintextIndex = 0;
-
                     while (true)
                     {
                         var bytesRead = ciphertext.Read(ciphertextBlock, 0, blockSize);
                         if (bytesRead < blockSize)
                         {
                             // The end is not cipher !?!?
-                            Array.Copy(ciphertextBlock, 0, plaintext, plaintextIndex, bytesRead);
+                            plaintext.Write(ciphertextBlock, 0, bytesRead);
                             break;
                         }
 
                         ice.Decrypt(ciphertextBlock, ref plaintextBlock);
-
-                        Array.Copy(plaintextBlock, 0, plaintext, plaintextIndex, blockSize);
-                        plaintextIndex += blockSize;
+                        plaintext.Write(plaintextBlock, 0, blockSize);
                     }
-
-                   
-
                 }
+
+                plaintext.Seek(0, SeekOrigin.Begin);
+
+                var parser = new DemoParser(plaintext);
+                parser.TickDone += (object sender, TickDoneEventArgs e) =>
+                {
+                    foreach (var playingParticipants in parser.PlayingParticipants)
+                    {
+                        Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+                    }
+                };
+
+                parser.ParseToEnd();
             }
         }
     }

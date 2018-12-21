@@ -9,4 +9,8 @@
     <PackageReference Include="Pcap.Net.x64" Version="1.0.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\demoinfo\DemoInfo\DemoInfo.csproj" />
+  </ItemGroup>
+
 </Project>
