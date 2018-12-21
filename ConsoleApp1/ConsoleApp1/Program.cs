@@ -12,40 +12,35 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            var allDevices = LivePacketDevice.AllLocalMachine;
-            if (allDevices.Count == 0)
+            // Only interfaces with Ipv4
+            var allDevices = LivePacketDevice.AllLocalMachine.Where(d => d.Addresses.Any(a => a.Address.Family == SocketAddressFamily.Internet)).ToArray();
+            if (allDevices.Length == 0)
             {
                 Console.WriteLine("No interfaces found! Make sure WinPcap is installed.");
                 return;
             }
 
-            for (int i = 0; i != allDevices.Count; ++i)
+            for (var i = 0; i < allDevices.Length; i++)
             {
                 var device = allDevices[i];
+                var addressName = device.Addresses.First(a => a.Address.Family == SocketAddressFamily.Internet).Address;
 
-                var addrs = string.Join(", ", device.Addresses.Select(x => x.Address));
-
-                Console.Write((i + 1) + ". " + device.Name + " addrs: " + addrs);
-
-                if (device.Description != null)
-                    Console.WriteLine(" (" + device.Description + ")");
-                else
-                    Console.WriteLine(" (No description available)");
+                Console.WriteLine($"{i} - {device.Description} - {addressName}");
             }
 
-            int deviceIndex = 0;
+            var deviceIndex = -1;
             do
             {
-                Console.WriteLine("Enter the interface number (1-" + allDevices.Count + "):");
+                Console.WriteLine($"Enter the interface number to sniff: ");
                 var deviceIndexString = Console.ReadLine();
-                if (!int.TryParse(deviceIndexString, out deviceIndex) ||
-                    deviceIndex < 1 || deviceIndex > allDevices.Count)
-                {
-                    deviceIndex = 0;
-                }
-            } while (deviceIndex == 0);
 
-            var selectedDevice = allDevices[deviceIndex - 1];
+                var isNumber = int.TryParse(deviceIndexString, out deviceIndex);
+                var withinExpectedRange = deviceIndex >= 0 && deviceIndex < allDevices.Length;
+                if (!isNumber || !withinExpectedRange) deviceIndex = -1;
+            }
+            while (deviceIndex == -1);
+
+            var selectedDevice = allDevices[deviceIndex];
 
             using (var communicator = selectedDevice.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000))  
             {
@@ -60,7 +55,7 @@ namespace ConsoleApp1
                     communicator.SetFilter(filter);
                 }
 
-                Console.WriteLine("Listening on " + selectedDevice.Description + "...");
+                Console.WriteLine($"Listening on {selectedDevice.Description}...");
 
                 communicator.ReceivePackets(0, PacketHandler);
             }
@@ -73,7 +68,7 @@ namespace ConsoleApp1
 
             if (udp.SourcePort == 27015)
             {
-                Console.WriteLine(packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff") + " " + ip.Source + ":" + udp.SourcePort + " -> " + ip.Destination + ":" + udp.DestinationPort);
+                Console.WriteLine($"{packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff")} {ip.Source}:{udp.SourcePort} -> {ip.Destination}:{udp.DestinationPort}");
                 Console.WriteLine(udp.Payload);
 
                 using (var ms = udp.Payload.ToMemoryStream())
