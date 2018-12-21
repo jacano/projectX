@@ -29,7 +29,7 @@ namespace Test
 
         private static void parser_TickDone(object sender, TickDoneEventArgs e)
         {
-            Console.WriteLine($"IngameTick: {parser.IngameTick}");
+            Console.WriteLine($"IngameTick: {parser.CurrentTick}");
             foreach (var playingParticipants in parser.PlayingParticipants)
             {
                 Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");

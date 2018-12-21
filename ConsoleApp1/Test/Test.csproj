@@ -6,13 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\demoinfo\DemoInfo\DemoInfo.csproj" />
     <ProjectReference Include="..\ConsoleApp1\ConsoleApp1.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DemoInfo">
-      <HintPath>..\..\demoinfo-master\DemoInfo\bin\Release\DemoInfo.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
