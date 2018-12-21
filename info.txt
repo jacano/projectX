@@ -12,3 +12,6 @@ https://github.com/CRACKbomber/Source360/blob/master/Source360.Test/Program.cs
 
 https://github.com/StatsHelix/demoinfo
 https://github.com/EHVAG/demostatistics-generator
+
+https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive_Dedicated_Servers
+https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive_Network_Channel_Encryption
