@@ -71,27 +71,35 @@ namespace ConsoleApp1
                 Console.WriteLine($"{packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff")} {ip.Source}:{udp.SourcePort} -> {ip.Destination}:{udp.DestinationPort}");
                 Console.WriteLine(udp.Payload);
 
-                using (var ms = udp.Payload.ToMemoryStream())
+                var ice = new IceKey(2);
+                ice.Set(iceKey);
+
+                var blockSize = ice.BlockSize();
+                var ciphertextBlock = new byte[blockSize];
+                var plaintextBlock = new byte[blockSize];
+
+                using (var ciphertext = udp.Payload.ToMemoryStream())
                 {
-                    var ice = new IceKey(2);
-                    ice.Set(iceKey);
+                    var plaintext = new byte[ciphertext.Length];
+                    var plaintextIndex = 0;
 
-                    var blockSize = ice.BlockSize();
-                    var p1 = new byte[blockSize];
-                    var p2 = new byte[blockSize];
-
-                    var bytesLeft = ms.Length;
-                    var plain = new byte[bytesLeft];
-
-                    while (bytesLeft >= blockSize)
+                    while (true)
                     {
-                        ice.Decrypt(p1, ref p2);
+                        var bytesRead = ciphertext.Read(ciphertextBlock, 0, blockSize);
+                        if (bytesRead < blockSize)
+                        {
+                            // The end is not cipher !?!?
+                            Array.Copy(ciphertextBlock, 0, plaintext, plaintextIndex, bytesRead);
+                            break;
+                        }
 
-                        bytesLeft -= blockSize;
+                        ice.Decrypt(ciphertextBlock, ref plaintextBlock);
+
+                        Array.Copy(plaintextBlock, 0, plaintext, plaintextIndex, blockSize);
+                        plaintextIndex += blockSize;
                     }
 
-
-
+                   
 
                 }
             }
