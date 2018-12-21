@@ -93,7 +93,7 @@ namespace ConsoleApp1
                         var bytesRead = ciphertext.Read(ciphertextBlock, 0, blockSize);
                         if (bytesRead < blockSize)
                         {
-                            // The end is not cipher !?!?
+                            // The end is not ciphered !?!?
                             plaintext.Write(ciphertextBlock, 0, bytesRead);
                             break;
                         }
