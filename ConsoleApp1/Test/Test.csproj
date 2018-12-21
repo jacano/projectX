@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="match730_003317647861457354858_2030613425_135.dem">
+    <None Update="*.dem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="plain.txt">

@@ -14,7 +14,31 @@ namespace Test
             //Encrypt();
             //Decrypt();
 
-            DemoTest();
+            //StripHeaderToDemo();
+
+            //DemoTest();
+
+            DemoTestHeadless();
+        }
+
+        private static void DemoTestHeadless()
+        {
+            parser = new DemoParser(File.OpenRead("headerless.dem"));
+
+            parser.TickDone += parser_TickDone;
+
+            parser.ParseToEnd();
+        }
+
+        private static void StripHeaderToDemo()
+        {
+            var file = File.OpenRead("match730_003317647861457354858_2030613425_135.dem");
+            file.Position = 1072;
+
+            using (var fileStream = File.Create("headerless.dem"))
+            {
+                file.CopyTo(fileStream);
+            }
         }
 
         private static void DemoTest()
