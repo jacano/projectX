@@ -1,3 +1,6 @@
 [submodule "demoinfo"]
 	path = demoinfo
 	url = ../demoinfo.git
+[submodule "sniffles"]
+	path = sniffles
+	url = git@gitlab.com:jacanosalado/sniffles.git
