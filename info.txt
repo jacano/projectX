@@ -44,8 +44,17 @@ https://github.com/ajkhoury/SigMaker-x64
 https://github.com/ajkhoury/ReClassEx
 https://github.com/ReClassNET/ReClass.NET
 
+
+x64dbg -> VEH
+https://github.com/brock7/xdbg
+
+StrongOD
+
+
 https://github.com/GrahamGunlock/FastGlowEsp
 
 https://www.unknowncheats.me/forum/general-programming-and-reversing/233833-ollydbg-1-plugin-sharpod-anti-debug.html
+
+https://www.unknowncheats.me/forum/general-programming-and-reversing/312314-steps-hyper-research.html
 
 https://www.unknowncheats.me/forum/general-programming-and-reversing/292598-viviennevmm-stealthy-debugging-framework-implemented-via-intel-vt-hypervisor.html
