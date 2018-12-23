@@ -50,7 +50,7 @@ https://github.com/brock7/xdbg
 
 StrongOD
 
-
+https://github.com/aganonki/Aga_CSGO_hack
 https://github.com/GrahamGunlock/FastGlowEsp
 
 https://www.unknowncheats.me/forum/general-programming-and-reversing/233833-ollydbg-1-plugin-sharpod-anti-debug.html
