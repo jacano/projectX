@@ -77,6 +77,11 @@ namespace ConsoleApp1
                 return;
             }
 
+            HandlePayload(payload);
+        }
+
+        private static void HandlePayload(Datagram payload)
+        {
             var ice = new IceKey(2);
             ice.Set(iceKey);
 

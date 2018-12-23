@@ -15,3 +15,37 @@ https://github.com/EHVAG/demostatistics-generator
 
 https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive_Dedicated_Servers
 https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive_Network_Channel_Encryption
+
+
+https://github.com/frk1/hazedumper/blob/master/csgo.cs
+
+public const Int32 clientstate_net_channel = 0x9C;
+https://www.unknowncheats.me/forum/counterstrike-global-offensive/148114-inetchannel-pointer.html
+https://www.unknowncheats.me/forum/counterstrike-global-offensive/187850-packet-sniffing.html
+
+
+https://github.com/dsasmblr/game-hacking
+
+
+https://github.com/GrahamGunlock/FastGlowEsp
+Mem.AttachProcess("csgo.exe");
+dwClientDLL = Mem.GetModule("client_panorama.dll");
+dwEngineDLL = Mem.GetModule("engine.dll");
+dwCurrentLocalPlayerBase = Mem.Read<DWORD>(dwClientDLL + Offsets->dwLocalPlayer);
+
+
+https://www.unknowncheats.me/forum/counterstrike-global-offensive/148114-inetchannel-pointer.html
+
+Sig to set_ice_key
+sig: E8 ? ? ? ? 8B 4E 58 8B C1 
+
+https://github.com/ajkhoury/SigMaker-x64
+
+https://github.com/ajkhoury/ReClassEx
+https://github.com/ReClassNET/ReClass.NET
+
+https://github.com/GrahamGunlock/FastGlowEsp
+
+https://www.unknowncheats.me/forum/general-programming-and-reversing/233833-ollydbg-1-plugin-sharpod-anti-debug.html
+
+https://www.unknowncheats.me/forum/general-programming-and-reversing/292598-viviennevmm-stealthy-debugging-framework-implemented-via-intel-vt-hypervisor.html
