@@ -23,7 +23,8 @@ namespace Test
 
         private static void DemoTestHeadless()
         {
-            parser = new DemoParser(File.OpenRead("headerless.dem"));
+            parser = new DemoParser();
+            parser.SetStream(File.OpenRead("headerless.dem"));
 
             parser.TickDone += parser_TickDone;
 
@@ -43,7 +44,8 @@ namespace Test
 
         private static void DemoTest()
         {
-            parser = new DemoParser(File.OpenRead("match730_003317647861457354858_2030613425_135.dem"));
+            parser = new DemoParser();
+            parser.SetStream(File.OpenRead("match730_003317647861457354858_2030613425_135.dem"));
 
             parser.TickDone += parser_TickDone;
 

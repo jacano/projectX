@@ -1,5 +1,8 @@
 ﻿using CSERLibrary.Models;
 using DemoInfo;
+using DemoInfo.DP;
+using DemoInfo.DP.FastNetmessages;
+using DemoInfo.Messages;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using System;
@@ -10,10 +13,13 @@ namespace ConsoleApp1
 {
     class Program
     {
-        static readonly byte[] iceKey = new byte[] { 0x6C, 0x06, 0x5F, 0xA4, 0x05, 0xAD, 0x18, 0x60, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        private static readonly byte[] iceKey = new byte[] { 0x43, 0x53, 0x47, 0x4F, 0x68, 0x35, 0x00, 0x00, 0x5A, 0x0D, 0x00, 0x00, 0x56, 0x03, 0x00, 0x00, };
+        private static DemoParser parser;
 
         static void Main(string[] args)
         {
+            parser = new DemoParser();
+
             // Only interfaces with Ipv4
             var allDevices = LivePacketDevice.AllLocalMachine.Where(d => d.Addresses.Any(a => a.Address.Family == SocketAddressFamily.Internet)).ToArray();
             if (allDevices.Length == 0)
@@ -81,8 +87,8 @@ namespace ConsoleApp1
             {
                 var payloadData = ms.ToArray();
 
-                SavePayload(payloadData);
-                //HandlePayload(payloadData);
+                //SavePayload(payloadData);
+                HandlePayload(payloadData);
             }
         }
 
@@ -123,22 +129,64 @@ namespace ConsoleApp1
 
                 plaintext.Seek(0, SeekOrigin.Begin);
 
-                //ParseDemo(plaintext);
+                var plaintextData = plaintext.ToArray();
+
+                var deltaOffset = plaintextData[0];
+                if (deltaOffset > 0 && deltaOffset + 5 < payload.Length)
+                {
+                    var pos1 = plaintextData[deltaOffset + 1];
+                    var pos2 = plaintextData[deltaOffset + 2];
+                    var pos3 = plaintextData[deltaOffset + 3];
+                    var pos4 = plaintextData[deltaOffset + 4];
+
+                    var dataFinalSize = SwapBytes(pos4, pos3, pos2, pos1);
+                    if (dataFinalSize + deltaOffset + 5 == payload.Length)
+                    {
+                        var packetData = new byte[dataFinalSize];
+                        Array.Copy(plaintextData, deltaOffset + 5, packetData, 0, dataFinalSize);
+
+                        using (var ms = new MemoryStream(packetData))
+                        {
+                            ParseDemo(ms);
+                        }
+                    }
+                }
             }
+        }
+
+        public static uint SwapBytes(byte word1, byte word2, byte word3, byte word4)
+        {
+            return (uint)(word1 & 0x000000FF) | (uint)((word2 << 8) & 0x0000FF00) | (uint)((word3 << 16) & 0x00FF0000) | (uint)((word4 << 24) & 0xFF000000);
         }
 
         private static void ParseDemo(MemoryStream plaintext)
         {
-            var parser = new DemoParser(plaintext);
-            parser.TickDone += (object sender, TickDoneEventArgs e) =>
-            {
+            var bitStream = BitStreamUtil.Create(plaintext);
+
+            bitStream.ReadInt(32); // SeqNrIn
+            bitStream.ReadInt(32); // SeqNrOut
+
+            var nFlags = bitStream.ReadVarInt();
+
+            var unk0 = bitStream.ReadSignedInt(16); // dunno what this is
+            var unk1 = bitStream.ReadSignedVarInt(); // dunno what this is
+
+            if (nFlags != 0 || nFlags >= 0xE1u)
+	        {
+                int cmd = bitStream.ReadProtobufVarInt(); //What type of packet is this?
+                int length = bitStream.ReadProtobufVarInt(); //And how long is it?
+
+                if (cmd == (int)SVC_Messages.svc_PacketEntities)
+                {
+                    ///new PacketEntities().Parse(bitStream, parser);
+                }
+
                 foreach (var playingParticipants in parser.PlayingParticipants)
                 {
                     Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
                 }
-            };
 
-            parser.ParseToEnd();
+            }
         }
     }
 }
