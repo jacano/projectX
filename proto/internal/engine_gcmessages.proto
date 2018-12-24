@@ -1,16 +1,18 @@
+syntax = "proto3";
+
 import "google/protobuf/descriptor.proto";
 
 option cc_generic_services = false;
 
 message CEngineGotvSyncPacket {
-	optional uint64 match_id = 1;
-	optional uint32 instance_id = 2;
-	optional uint32 signupfragment = 3;
-	optional uint32 currentfragment = 4;
-	optional float tickrate = 5;
-	optional uint32 tick = 6;
-	optional float rtdelay = 8;
-	optional float rcvage = 9;
-	optional float keyframe_interval = 10;
+	uint64 match_id = 1;
+	uint32 instance_id = 2;
+	uint32 signupfragment = 3;
+	uint32 currentfragment = 4;
+	float tickrate = 5;
+	uint32 tick = 6;
+	float rtdelay = 8;
+	float rcvage = 9;
+	float keyframe_interval = 10;
 }
 
