@@ -1,5 +1,3 @@
-syntax = "proto3";
-
 import "google/protobuf/descriptor.proto";
 import "netmessages.proto";
 import "cstrike15_gcmessages.proto";
@@ -87,128 +85,128 @@ enum ECSUsrMsg_DisconnectToLobby_Action {
 
 message CCSUsrMsg_VGUIMenu {
 	message Subkey {
-		string name = 1;
-		string str = 2;
+		optional string name = 1;
+		optional string str = 2;
 	}
 
-	string name = 1;
-	bool show = 2;
+	optional string name = 1;
+	optional bool show = 2;
 	repeated .CCSUsrMsg_VGUIMenu.Subkey subkeys = 3;
 }
 
 message CCSUsrMsg_Geiger {
-	int32 range = 1;
+	optional int32 range = 1;
 }
 
 message CCSUsrMsg_Train {
-	int32 train = 1;
+	optional int32 train = 1;
 }
 
 message CCSUsrMsg_HudText {
-	string text = 1;
+	optional string text = 1;
 }
 
 message CCSUsrMsg_SayText {
-	int32 ent_idx = 1;
-	string text = 2;
-	bool chat = 3;
-	bool textallchat = 4;
+	optional int32 ent_idx = 1;
+	optional string text = 2;
+	optional bool chat = 3;
+	optional bool textallchat = 4;
 }
 
 message CCSUsrMsg_SayText2 {
-	int32 ent_idx = 1;
-	bool chat = 2;
-	string msg_name = 3;
+	optional int32 ent_idx = 1;
+	optional bool chat = 2;
+	optional string msg_name = 3;
 	repeated string params = 4;
-	bool textallchat = 5;
+	optional bool textallchat = 5;
 }
 
 message CCSUsrMsg_TextMsg {
-	int32 msg_dst = 1;
+	optional int32 msg_dst = 1;
 	repeated string params = 3;
 }
 
 message CCSUsrMsg_HudMsg {
-	int32 channel = 1;
-	.CMsgVector2D pos = 2;
-	.CMsgRGBA clr1 = 3;
-	.CMsgRGBA clr2 = 4;
-	int32 effect = 5;
-	float fade_in_time = 6;
-	float fade_out_time = 7;
-	float hold_time = 9;
-	float fx_time = 10;
-	string text = 11;
+	optional int32 channel = 1;
+	optional .CMsgVector2D pos = 2;
+	optional .CMsgRGBA clr1 = 3;
+	optional .CMsgRGBA clr2 = 4;
+	optional int32 effect = 5;
+	optional float fade_in_time = 6;
+	optional float fade_out_time = 7;
+	optional float hold_time = 9;
+	optional float fx_time = 10;
+	optional string text = 11;
 }
 
 message CCSUsrMsg_Shake {
-	int32 command = 1;
-	float local_amplitude = 2;
-	float frequency = 3;
-	float duration = 4;
+	optional int32 command = 1;
+	optional float local_amplitude = 2;
+	optional float frequency = 3;
+	optional float duration = 4;
 }
 
 message CCSUsrMsg_Fade {
-	int32 duration = 1;
-	int32 hold_time = 2;
-	int32 flags = 3;
-	.CMsgRGBA clr = 4;
+	optional int32 duration = 1;
+	optional int32 hold_time = 2;
+	optional int32 flags = 3;
+	optional .CMsgRGBA clr = 4;
 }
 
 message CCSUsrMsg_Rumble {
-	int32 index = 1;
-	int32 data = 2;
-	int32 flags = 3;
+	optional int32 index = 1;
+	optional int32 data = 2;
+	optional int32 flags = 3;
 }
 
 message CCSUsrMsg_CloseCaption {
-	uint32 hash = 1;
-	int32 duration = 2;
-	bool from_player = 3;
+	optional uint32 hash = 1;
+	optional int32 duration = 2;
+	optional bool from_player = 3;
 }
 
 message CCSUsrMsg_CloseCaptionDirect {
-	uint32 hash = 1;
-	int32 duration = 2;
-	bool from_player = 3;
+	optional uint32 hash = 1;
+	optional int32 duration = 2;
+	optional bool from_player = 3;
 }
 
 message CCSUsrMsg_SendAudio {
-	string radio_sound = 1;
+	optional string radio_sound = 1;
 }
 
 message CCSUsrMsg_RawAudio {
-	int32 pitch = 1;
-	int32 entidx = 2;
-	float duration = 3;
-	string voice_filename = 4;
+	optional int32 pitch = 1;
+	optional int32 entidx = 2;
+	optional float duration = 3;
+	optional string voice_filename = 4;
 }
 
 message CCSUsrMsg_VoiceMask {
 	message PlayerMask {
-		int32 game_rules_mask = 1;
-		int32 ban_masks = 2;
+		optional int32 game_rules_mask = 1;
+		optional int32 ban_masks = 2;
 	}
 
 	repeated .CCSUsrMsg_VoiceMask.PlayerMask player_masks = 1;
-	bool player_mod_enable = 2;
+	optional bool player_mod_enable = 2;
 }
 
 message CCSUsrMsg_Damage {
-	int32 amount = 1;
-	.CMsgVector inflictor_world_pos = 2;
-	int32 victim_entindex = 3;
+	optional int32 amount = 1;
+	optional .CMsgVector inflictor_world_pos = 2;
+	optional int32 victim_entindex = 3;
 }
 
 message CCSUsrMsg_RadioText {
-	int32 msg_dst = 1;
-	int32 client = 2;
-	string msg_name = 3;
+	optional int32 msg_dst = 1;
+	optional int32 client = 2;
+	optional string msg_name = 3;
 	repeated string params = 4;
 }
 
 message CCSUsrMsg_HintText {
-	string text = 1;
+	optional string text = 1;
 }
 
 message CCSUsrMsg_KeyHintText {
@@ -217,18 +215,18 @@ message CCSUsrMsg_KeyHintText {
 
 message CCSUsrMsg_ProcessSpottedEntityUpdate {
 	message SpottedEntityUpdate {
-		int32 entity_idx = 1;
-		int32 class_id = 2;
-		int32 origin_x = 3;
-		int32 origin_y = 4;
-		int32 origin_z = 5;
-		int32 angle_y = 6;
-		bool defuser = 7;
-		bool player_has_defuser = 8;
-		bool player_has_c4 = 9;
+		optional int32 entity_idx = 1;
+		optional int32 class_id = 2;
+		optional int32 origin_x = 3;
+		optional int32 origin_y = 4;
+		optional int32 origin_z = 5;
+		optional int32 angle_y = 6;
+		optional bool defuser = 7;
+		optional bool player_has_defuser = 8;
+		optional bool player_has_c4 = 9;
 	}
 
-	bool new_update = 1;
+	optional bool new_update = 1;
 	repeated .CCSUsrMsg_ProcessSpottedEntityUpdate.SpottedEntityUpdate entity_updates = 2;
 }
 
@@ -237,147 +235,147 @@ message CCSUsrMsg_SendPlayerItemDrops {
 }
 
 message CCSUsrMsg_SendPlayerItemFound {
-	.CEconItemPreviewDataBlock iteminfo = 1;
-	int32 entindex = 2;
+	optional .CEconItemPreviewDataBlock iteminfo = 1;
+	optional int32 entindex = 2;
 }
 
 message CCSUsrMsg_ReloadEffect {
-	int32 entidx = 1;
-	int32 actanim = 2;
-	float origin_x = 3;
-	float origin_y = 4;
-	float origin_z = 5;
+	optional int32 entidx = 1;
+	optional int32 actanim = 2;
+	optional float origin_x = 3;
+	optional float origin_y = 4;
+	optional float origin_z = 5;
 }
 
 message CCSUsrMsg_WeaponSound {
-	int32 entidx = 1;
-	float origin_x = 2;
-	float origin_y = 3;
-	float origin_z = 4;
-	string sound = 5;
-	float timestamp = 6;
+	optional int32 entidx = 1;
+	optional float origin_x = 2;
+	optional float origin_y = 3;
+	optional float origin_z = 4;
+	optional string sound = 5;
+	optional float timestamp = 6;
 }
 
 message CCSUsrMsg_UpdateScreenHealthBar {
-	int32 entidx = 1;
-	float healthratio_old = 2;
-	float healthratio_new = 3;
-	int32 style = 4;
+	optional int32 entidx = 1;
+	optional float healthratio_old = 2;
+	optional float healthratio_new = 3;
+	optional int32 style = 4;
 }
 
 message CCSUsrMsg_EntityOutlineHighlight {
-	int32 entidx = 1;
+	optional int32 entidx = 1;
 }
 
 message CCSUsrMsg_AdjustMoney {
-	int32 amount = 1;
+	optional int32 amount = 1;
 }
 
 message CCSUsrMsg_ReportHit {
-	float pos_x = 1;
-	float pos_y = 2;
-	float timestamp = 4;
-	float pos_z = 3;
+	optional float pos_x = 1;
+	optional float pos_y = 2;
+	optional float timestamp = 4;
+	optional float pos_z = 3;
 }
 
 message CCSUsrMsg_KillCam {
-	int32 obs_mode = 1;
-	int32 first_target = 2;
-	int32 second_target = 3;
+	optional int32 obs_mode = 1;
+	optional int32 first_target = 2;
+	optional int32 second_target = 3;
 }
 
 message CCSUsrMsg_DesiredTimescale {
-	float desired_timescale = 1;
-	float duration_realtime_sec = 2;
-	int32 interpolator_type = 3;
-	float start_blend_time = 4;
+	optional float desired_timescale = 1;
+	optional float duration_realtime_sec = 2;
+	optional int32 interpolator_type = 3;
+	optional float start_blend_time = 4;
 }
 
 message CCSUsrMsg_CurrentTimescale {
-	float cur_timescale = 1;
+	optional float cur_timescale = 1;
 }
 
 message CCSUsrMsg_AchievementEvent {
-	int32 achievement = 1;
-	int32 count = 2;
-	int32 user_id = 3;
+	optional int32 achievement = 1;
+	optional int32 count = 2;
+	optional int32 user_id = 3;
 }
 
 message CCSUsrMsg_MatchEndConditions {
-	int32 fraglimit = 1;
-	int32 mp_maxrounds = 2;
-	int32 mp_winlimit = 3;
-	int32 mp_timelimit = 4;
+	optional int32 fraglimit = 1;
+	optional int32 mp_maxrounds = 2;
+	optional int32 mp_winlimit = 3;
+	optional int32 mp_timelimit = 4;
 }
 
 message CCSUsrMsg_PlayerStatsUpdate {
 	message Stat {
-		int32 idx = 1;
-		int32 delta = 2;
+		optional int32 idx = 1;
+		optional int32 delta = 2;
 	}
 
-	int32 version = 1;
+	optional int32 version = 1;
 	repeated .CCSUsrMsg_PlayerStatsUpdate.Stat stats = 4;
-	int32 user_id = 5;
-	int32 crc = 6;
+	optional int32 user_id = 5;
+	optional int32 crc = 6;
 }
 
 message CCSUsrMsg_DisplayInventory {
-	bool display = 1;
-	int32 user_id = 2;
+	optional bool display = 1;
+	optional int32 user_id = 2;
 }
 
 message CCSUsrMsg_QuestProgress {
-	uint32 quest_id = 1;
-	uint32 normal_points = 2;
-	uint32 bonus_points = 3;
-	bool is_event_quest = 4;
+	optional uint32 quest_id = 1;
+	optional uint32 normal_points = 2;
+	optional uint32 bonus_points = 3;
+	optional bool is_event_quest = 4;
 }
 
 message CCSUsrMsg_ScoreLeaderboardData {
-	.ScoreLeaderboardData data = 1;
+	optional .ScoreLeaderboardData data = 1;
 }
 
 message CCSUsrMsg_PlayerDecalDigitalSignature {
-	.PlayerDecalDigitalSignature data = 1;
+	optional .PlayerDecalDigitalSignature data = 1;
 }
 
 message CCSUsrMsg_XRankGet {
-	int32 mode_idx = 1;
-	int32 controller = 2;
+	optional int32 mode_idx = 1;
+	optional int32 controller = 2;
 }
 
 message CCSUsrMsg_XRankUpd {
-	int32 mode_idx = 1;
-	int32 controller = 2;
-	int32 ranking = 3;
+	optional int32 mode_idx = 1;
+	optional int32 controller = 2;
+	optional int32 ranking = 3;
 }
 
 message CCSUsrMsg_CallVoteFailed {
-	int32 reason = 1;
-	int32 time = 2;
+	optional int32 reason = 1;
+	optional int32 time = 2;
 }
 
 message CCSUsrMsg_VoteStart {
-	int32 team = 1;
-	int32 ent_idx = 2;
-	int32 vote_type = 3;
-	string disp_str = 4;
-	string details_str = 5;
-	string other_team_str = 6;
-	bool is_yes_no_vote = 7;
+	optional int32 team = 1;
+	optional int32 ent_idx = 2;
+	optional int32 vote_type = 3;
+	optional string disp_str = 4;
+	optional string details_str = 5;
+	optional string other_team_str = 6;
+	optional bool is_yes_no_vote = 7;
 }
 
 message CCSUsrMsg_VotePass {
-	int32 team = 1;
-	int32 vote_type = 2;
-	string disp_str = 3;
-	string details_str = 4;
+	optional int32 team = 1;
+	optional int32 vote_type = 2;
+	optional string disp_str = 3;
+	optional string details_str = 4;
 }
 
 message CCSUsrMsg_VoteFailed {
-	int32 team = 1;
-	int32 reason = 2;
+	optional int32 team = 1;
+	optional int32 reason = 2;
 }
 
 message CCSUsrMsg_VoteSetup {
@@ -385,133 +383,133 @@ message CCSUsrMsg_VoteSetup {
 }
 
 message CCSUsrMsg_SendLastKillerDamageToClient {
-	int32 num_hits_given = 1;
-	int32 damage_given = 2;
-	int32 num_hits_taken = 3;
-	int32 damage_taken = 4;
+	optional int32 num_hits_given = 1;
+	optional int32 damage_given = 2;
+	optional int32 num_hits_taken = 3;
+	optional int32 damage_taken = 4;
 }
 
 message CCSUsrMsg_ServerRankUpdate {
 	message RankUpdate {
-		int32 account_id = 1;
-		int32 rank_old = 2;
-		int32 rank_new = 3;
-		int32 num_wins = 4;
-		float rank_change = 5;
-		int32 rank_type_id = 6;
+		optional int32 account_id = 1;
+		optional int32 rank_old = 2;
+		optional int32 rank_new = 3;
+		optional int32 num_wins = 4;
+		optional float rank_change = 5;
+		optional int32 rank_type_id = 6;
 	}
 
 	repeated .CCSUsrMsg_ServerRankUpdate.RankUpdate rank_update = 1;
 }
 
 message CCSUsrMsg_XpUpdate {
-	.CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded data = 1;
+	optional .CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded data = 1;
 }
 
 message CCSUsrMsg_ItemPickup {
-	string item = 1;
+	optional string item = 1;
 }
 
 message CCSUsrMsg_ShowMenu {
-	int32 bits_valid_slots = 1;
-	int32 display_time = 2;
-	string menu_string = 3;
+	optional int32 bits_valid_slots = 1;
+	optional int32 display_time = 2;
+	optional string menu_string = 3;
 }
 
 message CCSUsrMsg_BarTime {
-	string time = 1;
+	optional string time = 1;
 }
 
 message CCSUsrMsg_AmmoDenied {
-	int32 ammoIdx = 1;
+	optional int32 ammoIdx = 1;
 }
 
 message CCSUsrMsg_MarkAchievement {
-	string achievement = 1;
+	optional string achievement = 1;
 }
 
 message CCSUsrMsg_MatchStatsUpdate {
-	string update = 1;
+	optional string update = 1;
 }
 
 message CCSUsrMsg_ItemDrop {
-	int64 itemid = 1;
-	bool death = 2;
+	optional int64 itemid = 1;
+	optional bool death = 2;
 }
 
 message CCSUsrMsg_GlowPropTurnOff {
-	int32 entidx = 1;
+	optional int32 entidx = 1;
 }
 
 message CCSUsrMsg_RoundBackupFilenames {
-	int32 count = 1;
-	int32 index = 2;
-	string filename = 3;
-	string nicename = 4;
+	optional int32 count = 1;
+	optional int32 index = 2;
+	optional string filename = 3;
+	optional string nicename = 4;
 }
 
 message CCSUsrMsg_SSUI {
-	bool show = 1;
+	optional bool show = 1;
 }
 
 message CCSUsrMsg_SurvivalStats {
 	message Fact {
-		int32 type = 1;
-		int32 display = 2;
-		int32 value = 3;
-		float interestingness = 4;
+		optional int32 type = 1;
+		optional int32 display = 2;
+		optional int32 value = 3;
+		optional float interestingness = 4;
 	}
 
 	message Placement {
-		uint64 xuid = 1;
-		int32 teamnumber = 2;
-		int32 placement = 3;
+		optional uint64 xuid = 1;
+		optional int32 teamnumber = 2;
+		optional int32 placement = 3;
 	}
 
 	message Damage {
-		uint64 xuid = 1;
-		int32 to = 2;
-		int32 to_hits = 3;
-		int32 from = 4;
-		int32 from_hits = 5;
+		optional uint64 xuid = 1;
+		optional int32 to = 2;
+		optional int32 to_hits = 3;
+		optional int32 from = 4;
+		optional int32 from_hits = 5;
 	}
 
-	uint64 xuid = 1;
+	optional uint64 xuid = 1;
 	repeated .CCSUsrMsg_SurvivalStats.Fact facts = 2;
 	repeated .CCSUsrMsg_SurvivalStats.Placement users = 3;
 	repeated .CCSUsrMsg_SurvivalStats.Damage damages = 5;
-	int32 ticknumber = 4;
+	optional int32 ticknumber = 4;
 }
 
 message CCSUsrMsg_ResetHud {
-	bool reset = 1;
+	optional bool reset = 1;
 }
 
 message CCSUsrMsg_GameTitle {
-	int32 dummy = 1;
+	optional int32 dummy = 1;
 }
 
 message CCSUsrMsg_RequestState {
-	int32 dummy = 1;
+	optional int32 dummy = 1;
 }
 
 message CCSUsrMsg_StopSpectatorMode {
-	int32 dummy = 1;
+	optional int32 dummy = 1;
 }
 
 message CCSUsrMsg_DisconnectToLobby {
-	int32 dummy = 1;
+	optional int32 dummy = 1;
 }
 
 message CCSUsrMsg_WarmupHasEnded {
-	int32 dummy = 1;
+	optional int32 dummy = 1;
 }
 
 message CCSUsrMsg_ClientInfo {
-	int32 dummy = 1;
+	optional int32 dummy = 1;
 }
 
 message CCSUsrMsg_ServerRankRevealAll {
-	int32 seconds_till_shutdown = 1;
+	optional int32 seconds_till_shutdown = 1;
 }
 
