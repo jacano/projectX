@@ -58,3 +58,8 @@ https://www.unknowncheats.me/forum/general-programming-and-reversing/233833-olly
 https://www.unknowncheats.me/forum/general-programming-and-reversing/312314-steps-hyper-research.html
 
 https://www.unknowncheats.me/forum/general-programming-and-reversing/292598-viviennevmm-stealthy-debugging-framework-implemented-via-intel-vt-hypervisor.html
+
+
+https://github.com/SteamDatabase/GameTracking-CSGO
+
+
