@@ -1,3 +1,4 @@
+@if exist generated_proto rmdir /s /q generated_proto
 @if not exist generated_proto mkdir generated_proto
 
 @echo Running Protocol Buffer Compiler on netmessages_public.proto...
