@@ -3,11 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\proto\generated_proto_cs\cstrike15_usermessages_public.cs" Link="generated_proto_cs\cstrike15_usermessages_public.cs" />
-    <Compile Include="..\..\proto\generated_proto_cs\netmessages_public.cs" Link="generated_proto_cs\netmessages_public.cs" />
+    <Compile Include="..\..\..\proto\generated_proto_cs\cstrike15_usermessages_public.cs" Link="generated_proto_cs\cstrike15_usermessages_public.cs" />
+    <Compile Include="..\..\..\proto\generated_proto_cs\netmessages_public.cs" Link="generated_proto_cs\netmessages_public.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,11 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\demoinfo\DemoInfo\DemoInfo.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="generated_proto_cs\" />
   </ItemGroup>
+
+  <Import Project="..\projectX.Util\projectX.Util.projitems" Label="Shared" />
 
 </Project>

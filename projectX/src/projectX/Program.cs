@@ -1,8 +1,4 @@
 ﻿using CSERLibrary.Models;
-using DemoInfo;
-using DemoInfo.DP;
-using DemoInfo.DP.FastNetmessages;
-using DemoInfo.Messages;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using System;
@@ -14,12 +10,9 @@ namespace ConsoleApp1
     class Program
     {
         private static readonly byte[] iceKey = new byte[] { 0x43, 0x53, 0x47, 0x4F, 0x68, 0x35, 0x00, 0x00, 0x5A, 0x0D, 0x00, 0x00, 0x56, 0x03, 0x00, 0x00, };
-        private static DemoParser parser;
 
         static void Main(string[] args)
         {
-            parser = new DemoParser();
-
             // Only interfaces with Ipv4
             var allDevices = LivePacketDevice.AllLocalMachine.Where(d => d.Addresses.Any(a => a.Address.Family == SocketAddressFamily.Internet)).ToArray();
             if (allDevices.Length == 0)
@@ -161,32 +154,32 @@ namespace ConsoleApp1
 
         private static void ParseDemo(MemoryStream plaintext)
         {
-            var bitStream = BitStreamUtil.Create(plaintext);
+         //   var bitStream = BitStreamUtil.Create(plaintext);
 
-            bitStream.ReadInt(32); // SeqNrIn
-            bitStream.ReadInt(32); // SeqNrOut
+         //   bitStream.ReadInt(32); // SeqNrIn
+         //   bitStream.ReadInt(32); // SeqNrOut
 
-            var nFlags = bitStream.ReadVarInt();
+         //   var nFlags = bitStream.ReadVarInt();
 
-            var unk0 = bitStream.ReadSignedInt(16); // dunno what this is
-            var unk1 = bitStream.ReadSignedVarInt(); // dunno what this is
+         //   var unk0 = bitStream.ReadSignedInt(16); // dunno what this is
+         //   var unk1 = bitStream.ReadSignedVarInt(); // dunno what this is
 
-            if (nFlags != 0 || nFlags >= 0xE1u)
-	        {
-                int cmd = bitStream.ReadProtobufVarInt(); //What type of packet is this?
-                int length = bitStream.ReadProtobufVarInt(); //And how long is it?
+         //   if (nFlags != 0 || nFlags >= 0xE1u)
+	        //{
+         //       int cmd = bitStream.ReadProtobufVarInt(); //What type of packet is this?
+         //       int length = bitStream.ReadProtobufVarInt(); //And how long is it?
 
-                if (cmd == (int)SVC_Messages.svc_PacketEntities)
-                {
-                    ///new PacketEntities().Parse(bitStream, parser);
-                }
+         //       if (cmd == (int)SVC_Messages.svc_PacketEntities)
+         //       {
+         //           ///new PacketEntities().Parse(bitStream, parser);
+         //       }
 
-                foreach (var playingParticipants in parser.PlayingParticipants)
-                {
-                    Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
-                }
+         //       foreach (var playingParticipants in parser.PlayingParticipants)
+         //       {
+         //           Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+         //       }
 
-            }
+         //   }
         }
     }
 }

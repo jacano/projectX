@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\demoinfo\DemoInfo\DemoInfo.csproj" />
-    <ProjectReference Include="..\ConsoleApp1\ConsoleApp1.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,5 +17,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Import Project="..\src\projectX.Util\projectX.Util.projitems" Label="Shared" />
 
 </Project>
