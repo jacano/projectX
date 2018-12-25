@@ -9,6 +9,9 @@
     <Import_RootNamespace>projectX.Util</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Bitstream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CrcUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IceKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Preconditions.cs" />
   </ItemGroup>
 </Project>

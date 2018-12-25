@@ -62,4 +62,6 @@ https://www.unknowncheats.me/forum/general-programming-and-reversing/292598-vivi
 
 https://github.com/SteamDatabase/GameTracking-CSGO
 
+https://github.com/aschleck/nora
+
 
