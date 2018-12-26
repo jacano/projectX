@@ -55,7 +55,7 @@ namespace Test
         private static void DemoTest1()
         {
             parser = new DemoParser();
-            parser.SetStream(File.OpenRead("demo_base1.dem"));
+            parser.SetStream(File.OpenRead("commu.dem"));
 
             parser.TickDone += parser_TickDone;
 

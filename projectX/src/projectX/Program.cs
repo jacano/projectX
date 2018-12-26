@@ -3,6 +3,7 @@ using DemoInfo;
 using DemoInfo.DP;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
+using projectX.Util;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace ConsoleApp1
     {
         private static readonly byte[] iceKey = new byte[] { 0x43, 0x53, 0x47, 0x4F, 0x68, 0x35, 0x00, 0x00, 0x5A, 0x0D, 0x00, 0x00, 0x56, 0x03, 0x00, 0x00, };
         private static int receivedTotal;
+        private static int filter1;
+        private static int filter2;
 
         private static uint lastAckRecv;
         private static uint sequenceIn;
@@ -27,20 +30,18 @@ namespace ConsoleApp1
         {
             InitDemo();
 
-            //Sniff();
+            Sniff();
 
-            OfflinePackages();
+            //OfflinePackages();
         }
 
         private static void InitDemo()
         {
             demoParser = new DemoParser();
             demoParser.TickDone += parser_TickDone;
-            demoParser.SetStream(File.OpenRead("demo_base1.dem"));
+            demoParser.SetStream(File.OpenRead("pov_123.dem"));
             demoParser.ParseHeader();
             demoParser.ParseToEnd();
-
-            Console.WriteLine("-----------------------------------");
         }
 
         private static void OfflinePackages()
@@ -120,14 +121,14 @@ namespace ConsoleApp1
             receivedTotal++;
 
             Console.CursorLeft = 0;
-            Console.Write(receivedTotal);
+            Console.WriteLine($"receivedTotal: {receivedTotal}");
 
             using (var ms = payload.ToMemoryStream())
             {
                 var payloadData = ms.ToArray();
 
-                SavePayload(payloadData);
-                //DecipherPayload(payloadData);
+                //SavePayload(payloadData);
+                DecipherPayload(payloadData);
             }
         }
 
@@ -190,8 +191,10 @@ namespace ConsoleApp1
                     var packetData = new byte[dataFinalSize];
                     Array.Copy(plaintextData, deltaOffset + 5, packetData, 0, dataFinalSize);
 
+                    filter1++;
+                    Console.WriteLine($"filter1: {filter1}");
 
-                    ProcessPacket(packetData, packetData.Length);
+                    ProcessPacket(packetData);
                 }
             }
         }
@@ -202,29 +205,38 @@ namespace ConsoleApp1
         }
 
 
-        private static void ProcessPacket(byte[] bytes, int length)
+        private static void ProcessPacket(byte[] bytes)
         {
+            var length = bytes.Length;
+            uint seq, ack;
+            byte flags;
             using (var stream = BitStreamUtil.Create(bytes))
             {
-                uint seq = stream.ReadInt(32);
-                uint ack = stream.ReadInt(32);
+                seq = stream.ReadInt(32);
+                ack = stream.ReadInt(32);
 
-                byte flags = stream.ReadByte();
+                flags = stream.ReadByte();
                 ushort checksum = (ushort)stream.ReadInt(16);
 
-                //long at = stream.Position;
-                //ushort computed = CrcUtils.Compute16(stream);
-                //stream.Position = at;
+                stream.BeginChunk((length - 11) * 8);
+                ushort computed = CrcUtils.Compute16(stream);
+                stream.EndChunk();
 
-                //if (checksum != computed)
-                //{
-                //    Console.WriteLine(
-                //        "failed checksum:"
-                //            + "recv seq {0} ack {1} flags {2:x} checksum {3:x} computed {4:x}",
-                //        seq, ack, flags, checksum, computed);
-                //    return;
-                //}
+                if (checksum != computed)
+                {
+                    Console.WriteLine(
+                        "failed checksum:"
+                            + "recv seq {0} ack {1} flags {2:x} checksum {3:x} computed {4:x}",
+                        seq, ack, flags, checksum, computed);
+                    return;
+                }
+            }
 
+            var remaining = new byte[length - 11];
+            Array.Copy(bytes, 11, remaining, 0, length - 11);
+
+            using (var stream = BitStreamUtil.Create(remaining))
+            {
                 byte reliableState = stream.ReadByte();
 
                 if ((flags & 0x10) == 0x10)
@@ -246,8 +258,10 @@ namespace ConsoleApp1
                     return;
                 }
 
+                filter2++;
+                Console.WriteLine($"filter2: {filter2}");
 
-                stream.BeginChunk((length - 12) * 8);
+                stream.BeginChunk((remaining.Length - 1) * 8);
                 DemoPacketParser.ParsePacket(stream, demoParser);
                 stream.EndChunk();
 
@@ -263,7 +277,10 @@ namespace ConsoleApp1
             Console.WriteLine($"IngameTick: {demoParser.CurrentTick}");
             foreach (var playingParticipants in demoParser.PlayingParticipants)
             {
-                Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+                if(playingParticipants.Name == "jacano")
+                {
+                    Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+                }
             }
         }
     }
