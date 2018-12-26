@@ -1,8 +1,8 @@
 ﻿using CSERLibrary.Models;
-using nora.lara;
+using DemoInfo;
+using DemoInfo.DP;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
-using ProtoBuf;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,10 +14,10 @@ namespace ConsoleApp1
         private static readonly byte[] iceKey = new byte[] { 0x43, 0x53, 0x47, 0x4F, 0x68, 0x35, 0x00, 0x00, 0x5A, 0x0D, 0x00, 0x00, 0x56, 0x03, 0x00, 0x00, };
         private static int receivedTotal;
 
-
         private static uint lastAckRecv;
         private static uint sequenceIn;
-        private static int svc_PacketEntitiesTotal;
+        //private static int svc_PacketEntitiesTotal;
+        private static DemoParser demoParser;
 
         private enum PacketFlags
         {
@@ -26,9 +26,22 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
+            InitDemo();
+
             //Sniff();
 
             OfflinePackages();
+        }
+
+        private static void InitDemo()
+        {
+            demoParser = new DemoParser();
+            demoParser.TickDone += parser_TickDone;
+            demoParser.SetStream(File.OpenRead("demo_base1.dem"));
+            demoParser.ParseHeader();
+            demoParser.ParseToEnd();
+
+            Console.WriteLine("-----------------------------------");
         }
 
         private static void OfflinePackages()
@@ -117,8 +130,8 @@ namespace ConsoleApp1
             {
                 var payloadData = ms.ToArray();
 
-                //SavePayload(payloadData);
-                DecipherPayload(payloadData);
+                SavePayload(payloadData);
+                //DecipherPayload(payloadData);
             }
         }
 
@@ -200,26 +213,26 @@ namespace ConsoleApp1
 
         private static void ProcessPacket(byte[] bytes, int length)
         {
-            using (var stream = Bitstream.CreateWith(bytes, length))
+            using (var stream = BitStreamUtil.Create(bytes))
             {
-                uint seq = stream.ReadUInt32();
-                uint ack = stream.ReadUInt32();
+                uint seq = stream.ReadInt(32);
+                uint ack = stream.ReadInt(32);
 
                 byte flags = stream.ReadByte();
-                ushort checksum = stream.ReadUInt16();
+                ushort checksum = (ushort)stream.ReadInt(16);
 
-                long at = stream.Position;
-                ushort computed = CrcUtils.Compute16(stream);
-                stream.Position = at;
+                //long at = stream.Position;
+                //ushort computed = CrcUtils.Compute16(stream);
+                //stream.Position = at;
 
-                if (checksum != computed)
-                {
-                    Console.WriteLine(
-                        "failed checksum:"
-                            + "recv seq {0} ack {1} flags {2:x} checksum {3:x} computed {4:x}",
-                        seq, ack, flags, checksum, computed);
-                    return;
-                }
+                //if (checksum != computed)
+                //{
+                //    Console.WriteLine(
+                //        "failed checksum:"
+                //            + "recv seq {0} ack {1} flags {2:x} checksum {3:x} computed {4:x}",
+                //        seq, ack, flags, checksum, computed);
+                //    return;
+                //}
 
                 byte reliableState = stream.ReadByte();
 
@@ -242,13 +255,22 @@ namespace ConsoleApp1
                     return;
                 }
 
-                while (HandleMessage(stream));
-                
+
+                stream.BeginChunk((length - 12) * 8);
+                DemoPacketParser.ParsePacket(stream, demoParser);
+                stream.EndChunk();
+
+                demoParser.UpdateTick(true);
+
+                //DemoPacketParser.ParsePacket(stream, demoParser);
+                //while (HandleMessage(stream));
+
                 lastAckRecv = ack;
                 sequenceIn = seq;
             }
         }
 
+        /*
         private static bool HandleMessage(Bitstream stream)
         {
             uint type = stream.ReadVarUInt();
@@ -258,55 +280,109 @@ namespace ConsoleApp1
             stream.Read(bytes, 0, (int)length);
 
             if (type == (uint)SVCMessages.svcPacketEntities)
+            { 
+            }
+
+            if (type == (uint)SVCMessages.svcPacketEntities)
             {
                 svc_PacketEntitiesTotal++;
                 Console.CursorLeft = 0;
                 Console.Write(svc_PacketEntitiesTotal);
 
-                using (var str = Bitstream.CreateWith(bytes))
+                using (var str1 = Bitstream.CreateWith(bytes))
                 {
-                    var message = Serializer.Deserialize<CSVCMsgPacketEntities>(str);
+                    var message = Serializer.Deserialize<CSVCMsgPacketEntities>(str1);
 
                     Console.WriteLine("svc_PacketEntities is_delta: "
                         + message.IsDelta
                         + " baseline: " + message.Baseline
                         + " update_baseline: " + message.UpdateBaseline
+                        + " update_entries: " + message.UpdatedEntries
                         + " delta: " + message.DeltaFrom);
+
+                    using (var str2 = Bitstream.CreateWith(message.EntityData))
+                    {
+                        //Update(str2, message.UpdatedEntries);
+                        //entityUpdater.Update(
+                        //    str2,
+                        //    (uint)message.Baseline,
+                        //    message.UpdateBaseline,
+                        //    (uint)message.UpdatedEntries,
+                        //    message.IsDelta);
+                    }
                 }
             }
 
             return !stream.Eof;
-        }
+        }*/
 
+        //private static void Update(Bitstream reader, int updatedEntries)
+        //{
+        //    int currentEntity = -1;
 
-        private static void ParseDemo(MemoryStream plaintext)
+        //    for (int i = 0; i < updatedEntries; i++)
+        //    {
+        //        //First read which entity is updated
+        //        currentEntity += 1 + (int)ReadUBitInt(reader);
+
+        //        //Find out whether we should create, destroy or update it. 
+        //        // Leave flag
+        //        if (reader.ReadBits(1) == 0)
+        //        {
+        //            // enter flag
+        //            if (reader.ReadBits(1) == 1)
+        //            {
+        //                //create it
+        //                var e = ReadEnterPVS(reader, currentEntity);
+
+        //                Entities[currentEntity] = e;
+
+        //                e.ApplyUpdate(reader);
+        //            }
+        //            else
+        //            {
+        //                // preserve / update
+        //                Entity e = Entities[currentEntity];
+        //                e.ApplyUpdate(reader);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Entity e = Entities[currentEntity];
+
+        //            Entities[currentEntity] = null;
+
+        //            //dunno, but you gotta read this.
+        //            reader.ReadBits(1)
+        //        }
+        //    }
+        //}
+
+        //public static uint ReadUBitInt(Bitstream bs)
+        //{
+        //    uint ret = bs.ReadBits(6);
+        //    switch (ret & (16 | 32))
+        //    {
+        //        case 16:
+        //            ret = (ret & 15) | (bs.ReadBits(4) << 4);
+        //            break;
+        //        case 32:
+        //            ret = (ret & 15) | (bs.ReadBits(8) << 4);
+        //            break;
+        //        case 48:
+        //            ret = (ret & 15) | (bs.ReadBits(32 - 4) << 4);
+        //            break;
+        //    }
+        //    return ret;
+        //}
+
+        private static void parser_TickDone(object sender, TickDoneEventArgs e)
         {
-         //   var bitStream = BitStreamUtil.Create(plaintext);
-
-         //   bitStream.ReadInt(32); // SeqNrIn
-         //   bitStream.ReadInt(32); // SeqNrOut
-
-         //   var nFlags = bitStream.ReadVarInt();
-
-         //   var unk0 = bitStream.ReadSignedInt(16); // dunno what this is
-         //   var unk1 = bitStream.ReadSignedVarInt(); // dunno what this is
-
-         //   if (nFlags != 0 || nFlags >= 0xE1u)
-	        //{
-         //       int cmd = bitStream.ReadProtobufVarInt(); //What type of packet is this?
-         //       int length = bitStream.ReadProtobufVarInt(); //And how long is it?
-
-         //       if (cmd == (int)SVC_Messages.svc_PacketEntities)
-         //       {
-         //           ///new PacketEntities().Parse(bitStream, parser);
-         //       }
-
-         //       foreach (var playingParticipants in parser.PlayingParticipants)
-         //       {
-         //           Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
-         //       }
-
-         //   }
+            Console.WriteLine($"IngameTick: {demoParser.CurrentTick}");
+            foreach (var playingParticipants in demoParser.PlayingParticipants)
+            {
+                Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+            }
         }
     }
 }

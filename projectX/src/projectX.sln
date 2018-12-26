@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "projectX", "projectX\projec
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "projectX.Util", "projectX.Util\projectX.Util.shproj", "{4FB6BC3A-0F3A-4314-9DBE-319716438426}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoInfo", "..\..\demoinfo\DemoInfo\DemoInfo.csproj", "{22D4CFC7-6810-4C18-A353-71A49782394F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		projectX.Util\projectX.Util.projitems*{4fb6bc3a-0f3a-4314-9dbe-319716438426}*SharedItemsImports = 13
@@ -29,6 +31,16 @@ Global
 		{84E04168-573C-4602-BC42-05C5A4F7CDF4}.SavePropValues|Any CPU.Build.0 = Release|Any CPU
 		{84E04168-573C-4602-BC42-05C5A4F7CDF4}.YoloDebug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84E04168-573C-4602-BC42-05C5A4F7CDF4}.YoloDebug|Any CPU.Build.0 = Debug|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.Bitstream-Debugging|Any CPU.ActiveCfg = Bitstream-Debugging|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.Bitstream-Debugging|Any CPU.Build.0 = Bitstream-Debugging|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.SavePropValues|Any CPU.ActiveCfg = SavePropValues|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.SavePropValues|Any CPU.Build.0 = SavePropValues|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.YoloDebug|Any CPU.ActiveCfg = YoloDebug|Any CPU
+		{22D4CFC7-6810-4C18-A353-71A49782394F}.YoloDebug|Any CPU.Build.0 = YoloDebug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

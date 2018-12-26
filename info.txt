@@ -29,7 +29,6 @@ https://github.com/dsasmblr/game-hacking
 
 https://github.com/GrahamGunlock/FastGlowEsp
 Mem.AttachProcess("csgo.exe");
-dwClientDLL = Mem.GetModule("client_panorama.dll");
 dwEngineDLL = Mem.GetModule("engine.dll");
 dwCurrentLocalPlayerBase = Mem.Read<DWORD>(dwClientDLL + Offsets->dwLocalPlayer);
 
@@ -63,5 +62,16 @@ https://www.unknowncheats.me/forum/general-programming-and-reversing/292598-vivi
 https://github.com/SteamDatabase/GameTracking-CSGO
 
 https://github.com/aschleck/nora
+
+Plan B:
+
+
+
+
+
+
+https://www.youtube.com/watch?v=NnHt_dNfN5E
+
+
 
 

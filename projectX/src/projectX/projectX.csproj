@@ -18,6 +18,13 @@
 
   <ItemGroup>
     <Folder Include="generated_proto_cs\" />
+    <None Update="*.dem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\demoinfo\DemoInfo\DemoInfo.csproj" />
   </ItemGroup>
 
   <Import Project="..\projectX.Util\projectX.Util.projitems" Label="Shared" />
