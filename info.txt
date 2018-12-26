@@ -67,6 +67,9 @@ https://www.youtube.com/watch?v=NnHt_dNfN5E
 
 record demo1
 stop
+https://www.youtube.com/watch?v=GmsKmMHvzuU
+
+https://developer.valvesoftware.com/wiki/SourceTV
 
 
 https://github.com/McSimp/gm_nethook
