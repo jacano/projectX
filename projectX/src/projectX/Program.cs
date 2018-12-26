@@ -16,7 +16,6 @@ namespace ConsoleApp1
 
         private static uint lastAckRecv;
         private static uint sequenceIn;
-        //private static int svc_PacketEntitiesTotal;
         private static DemoParser demoParser;
 
         private enum PacketFlags
@@ -113,9 +112,6 @@ namespace ConsoleApp1
             var udp = ip.Udp;
             var payload = udp.Payload;
 
-            //Console.WriteLine($"{ip.Source}:{udp.SourcePort} -> {ip.Destination}:{udp.DestinationPort}");
-            //Console.WriteLine(payload);
-
             if (udp.SourcePort != 27015)
             {
                 return;
@@ -196,11 +192,6 @@ namespace ConsoleApp1
 
 
                     ProcessPacket(packetData, packetData.Length);
-
-                    //using (var ms = new MemoryStream(packetData))
-                    //{
-                    //    ParseDemo(ms);
-                    //}
                 }
             }
         }
@@ -262,119 +253,10 @@ namespace ConsoleApp1
 
                 demoParser.UpdateTick(true);
 
-                //DemoPacketParser.ParsePacket(stream, demoParser);
-                //while (HandleMessage(stream));
-
                 lastAckRecv = ack;
                 sequenceIn = seq;
             }
         }
-
-        /*
-        private static bool HandleMessage(Bitstream stream)
-        {
-            uint type = stream.ReadVarUInt();
-            uint length = stream.ReadVarUInt();
-
-            byte[] bytes = new byte[length];
-            stream.Read(bytes, 0, (int)length);
-
-            if (type == (uint)SVCMessages.svcPacketEntities)
-            { 
-            }
-
-            if (type == (uint)SVCMessages.svcPacketEntities)
-            {
-                svc_PacketEntitiesTotal++;
-                Console.CursorLeft = 0;
-                Console.Write(svc_PacketEntitiesTotal);
-
-                using (var str1 = Bitstream.CreateWith(bytes))
-                {
-                    var message = Serializer.Deserialize<CSVCMsgPacketEntities>(str1);
-
-                    Console.WriteLine("svc_PacketEntities is_delta: "
-                        + message.IsDelta
-                        + " baseline: " + message.Baseline
-                        + " update_baseline: " + message.UpdateBaseline
-                        + " update_entries: " + message.UpdatedEntries
-                        + " delta: " + message.DeltaFrom);
-
-                    using (var str2 = Bitstream.CreateWith(message.EntityData))
-                    {
-                        //Update(str2, message.UpdatedEntries);
-                        //entityUpdater.Update(
-                        //    str2,
-                        //    (uint)message.Baseline,
-                        //    message.UpdateBaseline,
-                        //    (uint)message.UpdatedEntries,
-                        //    message.IsDelta);
-                    }
-                }
-            }
-
-            return !stream.Eof;
-        }*/
-
-        //private static void Update(Bitstream reader, int updatedEntries)
-        //{
-        //    int currentEntity = -1;
-
-        //    for (int i = 0; i < updatedEntries; i++)
-        //    {
-        //        //First read which entity is updated
-        //        currentEntity += 1 + (int)ReadUBitInt(reader);
-
-        //        //Find out whether we should create, destroy or update it. 
-        //        // Leave flag
-        //        if (reader.ReadBits(1) == 0)
-        //        {
-        //            // enter flag
-        //            if (reader.ReadBits(1) == 1)
-        //            {
-        //                //create it
-        //                var e = ReadEnterPVS(reader, currentEntity);
-
-        //                Entities[currentEntity] = e;
-
-        //                e.ApplyUpdate(reader);
-        //            }
-        //            else
-        //            {
-        //                // preserve / update
-        //                Entity e = Entities[currentEntity];
-        //                e.ApplyUpdate(reader);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Entity e = Entities[currentEntity];
-
-        //            Entities[currentEntity] = null;
-
-        //            //dunno, but you gotta read this.
-        //            reader.ReadBits(1)
-        //        }
-        //    }
-        //}
-
-        //public static uint ReadUBitInt(Bitstream bs)
-        //{
-        //    uint ret = bs.ReadBits(6);
-        //    switch (ret & (16 | 32))
-        //    {
-        //        case 16:
-        //            ret = (ret & 15) | (bs.ReadBits(4) << 4);
-        //            break;
-        //        case 32:
-        //            ret = (ret & 15) | (bs.ReadBits(8) << 4);
-        //            break;
-        //        case 48:
-        //            ret = (ret & 15) | (bs.ReadBits(32 - 4) << 4);
-        //            break;
-        //    }
-        //    return ret;
-        //}
 
         private static void parser_TickDone(object sender, TickDoneEventArgs e)
         {

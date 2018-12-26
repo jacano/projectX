@@ -46,7 +46,7 @@ namespace Test
             parser = new DemoParser();
             parser.SetStream(File.OpenRead("match730_003317647861457354858_2030613425_135.dem"));
 
-            //parser.TickDone += parser_TickDone;
+            parser.TickDone += parser_TickDone;
 
             parser.ParseHeader();
             parser.ParseToEnd();
@@ -55,9 +55,9 @@ namespace Test
         private static void DemoTest1()
         {
             parser = new DemoParser();
-            parser.SetStream(File.OpenRead("demo1234.dem"));
+            parser.SetStream(File.OpenRead("demo_base1.dem"));
 
-            //parser.TickDone += parser_TickDone;
+            parser.TickDone += parser_TickDone;
 
             parser.ParseHeader();
             parser.ParseToEnd();

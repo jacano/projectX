@@ -7,17 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\proto\generated_proto_cs\cstrike15_usermessages_public.cs" Link="generated_proto_cs\cstrike15_usermessages_public.cs" />
-    <Compile Include="..\..\..\proto\generated_proto_cs\netmessages_public.cs" Link="generated_proto_cs\netmessages_public.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Pcap.Net.x64" Version="1.0.4.1" />
     <PackageReference Include="protobuf-net" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="generated_proto_cs\" />
     <None Update="*.dem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

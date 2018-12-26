@@ -63,14 +63,14 @@ https://github.com/SteamDatabase/GameTracking-CSGO
 
 https://github.com/aschleck/nora
 
-Plan B:
-
-
-
-
-
-
 https://www.youtube.com/watch?v=NnHt_dNfN5E
+
+record demo1
+stop
+
+
+https://github.com/McSimp/gm_nethook
+https://github.com/aschleck/edith
 
 
 
