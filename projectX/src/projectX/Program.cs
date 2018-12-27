@@ -5,6 +5,7 @@ using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using projectX.Util;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -13,9 +14,10 @@ namespace ConsoleApp1
     class Program
     {
         private static readonly byte[] iceKey = new byte[] { 0x43, 0x53, 0x47, 0x4F, 0x68, 0x35, 0x00, 0x00, 0x5A, 0x0D, 0x00, 0x00, 0x56, 0x03, 0x00, 0x00, };
-        private static int receivedTotal;
-        private static int filter1;
-        private static int filter2;
+
+        //private static int receivedTotal;
+        //private static int filter1;
+        //private static int filter2;
 
         private static uint lastAckRecv;
         private static uint sequenceIn;
@@ -37,9 +39,8 @@ namespace ConsoleApp1
 
         private static void InitDemo()
         {
-            demoParser = new DemoParser();
+            demoParser = new DemoParser(File.OpenRead("pov_qwerty.dem"));
             demoParser.TickDone += parser_TickDone;
-            demoParser.SetStream(File.OpenRead("pov_123.dem"));
             demoParser.ParseHeader();
             demoParser.ParseToEnd();
         }
@@ -103,6 +104,8 @@ namespace ConsoleApp1
 
                 Console.WriteLine($"Listening on {selectedDevice.Description}...");
 
+                Console.Clear();
+
                 communicator.ReceivePackets(0, PacketHandler);
             }
         }
@@ -113,15 +116,18 @@ namespace ConsoleApp1
             var udp = ip.Udp;
             var payload = udp.Payload;
 
+            //Console.WriteLine($"{ip.Source}:{udp.SourcePort} -> {ip.Destination}:{udp.DestinationPort}");
+            //Console.WriteLine(payload);
+
             if (udp.SourcePort != 27015)
             {
                 return;
             }
 
-            receivedTotal++;
+            //receivedTotal++;
 
-            Console.CursorLeft = 0;
-            Console.WriteLine($"receivedTotal: {receivedTotal}");
+
+            //Console.WriteLine($"receivedTotal: {receivedTotal}");
 
             using (var ms = payload.ToMemoryStream())
             {
@@ -129,14 +135,16 @@ namespace ConsoleApp1
 
                 //SavePayload(payloadData);
                 DecipherPayload(payloadData);
+
+                //GetOnlyValidMsg(payloadData, payloadData.Length);
             }
         }
 
         private static void SavePayload(byte[] payload)
         {
-            var guid = $"{receivedTotal.ToString("D8")}.bin";
+            //var guid = $"{receivedTotal.ToString("D8")}.bin";
 
-            File.WriteAllBytes(guid, payload);
+            //File.WriteAllBytes(guid, payload);
         }
 
         private static void DecipherPayload(byte[] payload)
@@ -191,8 +199,8 @@ namespace ConsoleApp1
                     var packetData = new byte[dataFinalSize];
                     Array.Copy(plaintextData, deltaOffset + 5, packetData, 0, dataFinalSize);
 
-                    filter1++;
-                    Console.WriteLine($"filter1: {filter1}");
+                    //filter1++;
+                    //Console.WriteLine($"filter1: {filter1}");
 
                     ProcessPacket(packetData);
                 }
@@ -224,10 +232,10 @@ namespace ConsoleApp1
 
                 if (checksum != computed)
                 {
-                    Console.WriteLine(
-                        "failed checksum:"
-                            + "recv seq {0} ack {1} flags {2:x} checksum {3:x} computed {4:x}",
-                        seq, ack, flags, checksum, computed);
+                    //Console.WriteLine(
+                    //    "failed checksum:"
+                    //        + "recv seq {0} ack {1} flags {2:x} checksum {3:x} computed {4:x}",
+                    //    seq, ack, flags, checksum, computed);
                     return;
                 }
             }
@@ -241,15 +249,17 @@ namespace ConsoleApp1
 
                 if ((flags & 0x10) == 0x10)
                 {
-                    Console.WriteLine(
-                        "choke {0}: recv seq {1} ack {2} flags {3:x}",
-                        stream.ReadByte(), seq, ack, flags);
+                    //Console.WriteLine(
+                    //    "choke {0}: recv seq {1} ack {2} flags {3:x}",
+                    //    stream.ReadByte(), seq, ack, flags);
+
+                    return;
                 }
 
                 if (seq < sequenceIn)
                 {
                     // We no longer care.
-                    Console.WriteLine("dropped: recv seq {0} ack {1}", seq, ack);
+                    //Console.WriteLine("dropped: recv seq {0} ack {1}", seq, ack);
                     return;
                 }
 
@@ -258,14 +268,18 @@ namespace ConsoleApp1
                     return;
                 }
 
-                filter2++;
-                Console.WriteLine($"filter2: {filter2}");
+                //filter2++;
+                //Console.WriteLine($"filter2: {filter2}");
 
-                stream.BeginChunk((remaining.Length - 1) * 8);
-                DemoPacketParser.ParsePacket(stream, demoParser);
-                stream.EndChunk();
+                try
+                {
+                    stream.BeginChunk((remaining.Length - 1) * 8);
+                    DemoPacketParser.ParsePacket(stream, demoParser);
+                    stream.EndChunk();
 
-                demoParser.UpdateTick(true);
+                    demoParser.ForceTick(true);
+                }
+                catch { }
 
                 lastAckRecv = ack;
                 sequenceIn = seq;
@@ -274,13 +288,18 @@ namespace ConsoleApp1
 
         private static void parser_TickDone(object sender, TickDoneEventArgs e)
         {
+            Console.CursorLeft = 0;
+            Console.CursorTop = 0;
+            //Console.Clear();
+
             Console.WriteLine($"IngameTick: {demoParser.CurrentTick}");
             foreach (var playingParticipants in demoParser.PlayingParticipants)
             {
-                if(playingParticipants.Name == "jacano")
-                {
+                //Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
+                //if (playingParticipants.Name == "jacano")
+                //{
                     Console.WriteLine($"{playingParticipants.Name} - position: {playingParticipants.Position}");
-                }
+                //}
             }
         }
     }
